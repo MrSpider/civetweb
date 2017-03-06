@@ -545,6 +545,12 @@ CIVETWEB_API size_t
 mg_get_ports(const struct mg_context *ctx, size_t size, int *ports, int *ssl);
 
 
+/* Authorize a request with HTTP digest authentication. 
+   This function uses the global_auth_file defined in the options. */
+CIVETWEB_API int
+mg_handle_digest_authorization(struct mg_connection *conn, const char *path);
+
+
 /* Add, edit or delete the entry in the passwords file.
 
    This function allows an application to manipulate .htpasswd files on the

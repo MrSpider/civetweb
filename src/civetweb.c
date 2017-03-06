@@ -6835,6 +6835,17 @@ send_authorization_request(struct mg_connection *conn)
 }
 
 
+int
+mg_handle_digest_authorization(struct mg_connection *conn, const char *path)
+{
+	if (!check_authorization(conn, path)) {
+		send_authorization_request(conn);
+		return 0;
+	}
+	return 1;
+}
+
+
 #if !defined(NO_FILES)
 static int
 is_authorized_for_put(struct mg_connection *conn)
@@ -11136,8 +11147,7 @@ handle_request(struct mg_connection *conn)
 		/* 6.3. This is either a OPTIONS, GET, HEAD or POST request,
 		 * or it is a PUT or DELETE request to a resource that does not
 		 * correspond to a file. Check authorization. */
-		if (!check_authorization(conn, path)) {
-			send_authorization_request(conn);
+		if (!mg_handle_digest_authorization(conn, path)) {
 			return;
 		}
 	}
